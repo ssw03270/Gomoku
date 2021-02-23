@@ -5,9 +5,14 @@ def drawBoard():
     screen.fill(BROWN)              # fill screen brown
 
     for i in range(15):
-        pygame.draw.line(screen, BLACK, [0, i * 30 + 15], [450, i * 30 + 15], 2)    # divide boundaries
+        pygame.draw.line(screen, BLACK, [15, i * 30 + 15], [435, i * 30 + 15], 1)    # divide boundaries
     for i in range(15):                                                             #    
-        pygame.draw.line(screen, BLACK, [i * 30 + 15, 0], [i * 30 + 15, 450], 2)    # divide boundaries
+        pygame.draw.line(screen, BLACK, [i * 30 + 15, 15], [i * 30 + 15, 435], 1)    # divide boundaries
+    for i in range(3):
+        for j in range(3):
+            x = 2 + i * 5
+            y = 2 + j * 5
+            pygame.draw.circle(screen, BLACK, [x * 30 + 15, y * 30 + 15], 3)                # design board
 # draw each player's stone 
 def drawStone(mousePos:tuple, playerNum:int, map:list)->int:
     x = mousePos[0]                 # mouse position X
@@ -18,11 +23,11 @@ def drawStone(mousePos:tuple, playerNum:int, map:list)->int:
     
     if map[x][y] == 0:
         if playerNum == 1:          # if player number is 1
-            pygame.draw.circle(screen, BLACK, [x * 30 + 15, y * 30 + 15], 15)   # divide boundaries
+            pygame.draw.circle(screen, BLACK, [x * 30 + 15, y * 30 + 15], 15)   # draw stone
             map[x][y] = playerNum   # set map as player number
             playerNum = 2           # set player number 2
         elif playerNum == 2:        # if player number is 2
-            pygame.draw.circle(screen, WHITE, [x * 30 + 15, y * 30 + 15], 15)   # divide boundaries
+            pygame.draw.circle(screen, WHITE, [x * 30 + 15, y * 30 + 15], 15)   # draw stone
             map[x][y] = playerNum   # set map as player number
             playerNum = 1           # set player number 1
     

@@ -6,13 +6,13 @@ def drawBoard():
 
     for i in range(15):
         pygame.draw.line(screen, BLACK, [15, i * 30 + 15], [435, i * 30 + 15], 1)    # divide boundaries
-    for i in range(15):                                                             #    
+    for i in range(15):
         pygame.draw.line(screen, BLACK, [i * 30 + 15, 15], [i * 30 + 15, 435], 1)    # divide boundaries
     for i in range(3):
         for j in range(3):
             x = 2 + i * 5
             y = 2 + j * 5
-            pygame.draw.circle(screen, BLACK, [x * 30 + 15, y * 30 + 15], 3)                # design board
+            pygame.draw.circle(screen, BLACK, [x * 30 + 15, y * 30 + 15], 3)         # design board
 # draw each player's stone 
 def drawStone(mousePos:tuple, playerNum:int, map:list)->int:
     x = mousePos[0]                 # mouse position X
@@ -33,6 +33,81 @@ def drawStone(mousePos:tuple, playerNum:int, map:list)->int:
     
     return playerNum                # return player number
 
+def checkGameEnd(map:list)->int:    # return 0 : no winner, return 1 : black win, return 2 : white win
+    # check Horizontal
+    for i in range(15):
+        for j in range(15):
+            straightBlackStoneCnt = 0
+            straightWhiteStoneCnt = 0
+            for k in range(5):
+                try:
+                    if map[i][j + k] == 1:
+                        straightBlackStoneCnt += 1
+                    elif map[i][j + k] == 2:
+                        straightWhiteStoneCnt += 1
+                except:
+                    continue
+            if straightBlackStoneCnt == 5:
+                return 1
+            elif straightWhiteStoneCnt == 5:
+                return 2
+    
+    # check Vertical
+    for i in range(15):
+        for j in range(15):
+            straightBlackStoneCnt = 0
+            straightWhiteStoneCnt = 0
+            for k in range(5):
+                try:
+                    if map[i + k][j] == 1:
+                        straightBlackStoneCnt += 1
+                    elif map[i + k][j] == 2:
+                        straightWhiteStoneCnt += 1
+                except:
+                    continue
+            if straightBlackStoneCnt == 5:
+                return 1
+            elif straightWhiteStoneCnt == 5:
+                return 2
+
+    # check Cross 1
+    for i in range(15):
+        for j in range(15):
+            straightBlackStoneCnt = 0
+            straightWhiteStoneCnt = 0
+            for k in range(5):
+                try:
+                    if map[i + k][j + k] == 1:
+                        straightBlackStoneCnt += 1
+                    elif map[i + k][j + k] == 2:
+                        straightWhiteStoneCnt += 1
+                except:
+                    continue
+            if straightBlackStoneCnt == 5:
+                return 1
+            elif straightWhiteStoneCnt == 5:
+                return 2
+
+    # check Cross 2
+    for i in range(15):
+        for j in range(15):
+            straightBlackStoneCnt = 0
+            straightWhiteStoneCnt = 0
+            for k in range(5):
+                try:
+                    if map[i - k][j + k] == 1:
+                        straightBlackStoneCnt += 1
+                    elif map[i - k][j + k] == 2:
+                        straightWhiteStoneCnt += 1
+                except:
+                    continue
+            if straightBlackStoneCnt == 5:
+                return 1
+            elif straightWhiteStoneCnt == 5:
+                return 2
+    
+    return 0
+
 # pygame start
 pygame.init()
 
@@ -50,6 +125,7 @@ pygame.display.set_caption("Gomoku")                # set pygame title
 
 # game value
 done = False                                        # save game done
+end = False                                         # save game round done
 mouseDown = False                                   # save mouse button down
 
 playerNum = 1                                       # save player number
@@ -69,9 +145,16 @@ while not done:
         if event.type == pygame.MOUSEBUTTONDOWN:    # if mouse button down
             mouseDown = True                        # set mouse button down true
 
-    if mouseDown:                                   # if mouse button down
+    if mouseDown and not end:                       # if mouse button down
         mousePos = pygame.mouse.get_pos()           # get mouse position
         playerNum = drawStone(mousePos, playerNum, map)     # draw stone at mouse position
+        winner = checkGameEnd(map)                  # check winner
+        if winner == 1:                             # if black win
+            print("winner is black!!")
+            end = True                              # set game end
+        elif winner == 2:                           # if white win
+            print("winnner is white!!")
+            end = True                              # set game end
 
     mouseDown = False                               # set mouse button down false
 

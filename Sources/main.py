@@ -23,11 +23,11 @@ def drawStone(mousePos:tuple, playerNum:int, map:list)->int:
     
     if map[x][y] == 0:
         if playerNum == 1:          # if player number is 1
-            pygame.draw.circle(screen, BLACK, [x * 30 + 15, y * 30 + 15], 15)   # draw stone
+            screen.blit(blackStone, (x * 30, y * 30))     # draw stone
             map[x][y] = playerNum   # set map as player number
             playerNum = 2           # set player number 2
         elif playerNum == 2:        # if player number is 2
-            pygame.draw.circle(screen, WHITE, [x * 30 + 15, y * 30 + 15], 15)   # draw stone
+            screen.blit(whiteStone, (x * 30, y * 30))     # draw stone
             map[x][y] = playerNum   # set map as player number
             playerNum = 1           # set player number 1
     
@@ -115,6 +115,10 @@ pygame.init()
 BLACK   = (  0,   0,   0)                           # color black
 WHITE   = (255, 255, 255)                           # color white
 BROWN   = (167, 133, 106)                           # color brown
+
+# game image
+blackStone = pygame.transform.scale(pygame.image.load(r".\Resources\BlackStone.png"), (30, 30))     # load image black stone
+whiteStone = pygame.transform.scale(pygame.image.load(r".\Resources\WhiteStone.png"), (30, 30))     # load image white stone
 
 # set display size
 size = [450, 450]                                   # set pygame screen size

@@ -32,7 +32,7 @@ def drawStone(mousePos:tuple, playerNum:int, map:list)->int:
             playerNum = 1           # set player number 1
     
     return playerNum                # return player number
-
+# check game end
 def checkGameEnd(map:list)->int:    # return 0 : no winner, return 1 : black win, return 2 : white win
     # check Horizontal
     for i in range(15):
@@ -107,7 +107,15 @@ def checkGameEnd(map:list)->int:    # return 0 : no winner, return 1 : black win
                 return 2
     
     return 0
-
+# draw result dislpay
+def drawResultDisplay(winner:int):
+    pygame.draw.rect(screen, WHITE, [50,190,350,70])                    # draw background
+    pygame.draw.rect(screen, BLACK, [50,190,350,70],2)                  # draw outline
+    font = pygame.font.SysFont('arial',60)                              # set font
+    textStr = "Black is winner" if winner == 1 else "White is winner"   # set text string
+    text = font.render(textStr, True, BLACK)                            # set text
+    textRect = text.get_rect(center = [225, 225])                       # set text position center
+    screen.blit(text, textRect)                                         # display text
 # pygame start
 pygame.init()
 
@@ -153,12 +161,8 @@ while not done:
         mousePos = pygame.mouse.get_pos()           # get mouse position
         playerNum = drawStone(mousePos, playerNum, map)     # draw stone at mouse position
         winner = checkGameEnd(map)                  # check winner
-        if winner == 1:                             # if black win
-            print("winner is black!!")
-            end = True                              # set game end
-        elif winner == 2:                           # if white win
-            print("winnner is white!!")
-            end = True                              # set game end
+        if winner != 0:
+            drawResultDisplay(winner)               # draw result display
 
     mouseDown = False                               # set mouse button down false
 
